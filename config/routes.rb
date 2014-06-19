@@ -4,15 +4,17 @@ Rails.application.routes.draw do
     resources :sessions, only: [:new, :created, :destroy]
     resources :words
     resources :categories
-
+    resources :monitors , only: [:index]
 
     root to: 'sessions#new'
 
-    post '/signin' => 'sessions#create'
-    post '/signout' => 'sessions#destroy'
+    match '/signin' => 'sessions#create', via: :post
+    match '/signout' => 'sessions#destroy', via: :post
+    match '/monitors/import' => 'monitors#import', via: :post
 
-    get '/signin' => 'sessions#new'
-    get '/home' => 'static_pages#home'
+    match '/monitors/export' => 'monitors#export', via: :get
+    match '/signin' => 'sessions#new', via: :get
+    match '/home' => 'static_pages#home', via: :get
   end
 
   resources :categories
@@ -23,12 +25,12 @@ Rails.application.routes.draw do
 
   root to: 'static_pages#home'
 
-  post 'signin' => 'sessions#create'
+  match 'signin' => 'sessions#create', via: :post
 
-  get '/home' => 'static_pages#home'
-  get '/about' => 'static_pages#about'
-  get '/contact' => 'static_pages#contact'
-  get '/signin' => 'sessions#new'
-  get '/signout' => 'sessions#destroy'
-  get '/signup' => 'users#new'
+  match '/home' => 'static_pages#home', via: :get
+  match '/about' => 'static_pages#about', via: :get
+  match '/contact' => 'static_pages#contact', via: :get
+  match '/signin' => 'sessions#new', via: :get
+  match '/signout' => 'sessions#destroy', via: :get
+  match '/signup' => 'users#new', via: :get
 end
